@@ -1,34 +1,45 @@
-﻿using System;
+﻿using School;
+using System;
 using System.Threading;
 
 namespace CalculatorPro
 {
+    class MyClass
+    {
+        private string field = null;
+
+        public string Field
+        {
+            set
+            {
+                field = value;
+            }
+            get
+            {
+                return field;
+            }
+
+        }
+    }
     class Program
     {
-        private static void Main()
+        static void Main()
         {
-            Thread thread = new Thread(new ParameterizedThreadStart(WriteChar));
+            MyClass obj = new MyClass();
 
-            Console.WriteLine("Нажмите любую клавишу ");
+            obj.Field = "Hello world";
+
+            Console.WriteLine(obj.Field);
+
+            string nameProgram = Console.ReadLine();
+            string surnameProgram = Console.ReadLine();
+            string patronymicProgram = Console.ReadLine();
+
+            fullNameChild name = new fullNameChild(nameProgram, surnameProgram, patronymicProgram);
+            Console.WriteLine($"Ваше имя : {name.Name}, ваша фамилия : {name.Surname}, ваше очество : {name.Patronymic}");
+
+
             Console.ReadKey();
-
-            thread.Start('*');
-
-            for (int i = 0; i < 80; i++)
-            {
-                Console.Write('-');
-                Thread.Sleep(70);
-            }
-        }
-
-        private static void WriteChar(object arg)
-        {
-            char item = (char)arg;
-            for (int i = 0; i < 80; i++)
-            {
-                Console.Write(item);
-                Thread.Sleep(70);
-            }
         }
     }
 }
