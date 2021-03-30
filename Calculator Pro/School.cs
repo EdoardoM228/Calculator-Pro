@@ -4,58 +4,80 @@ using System.Text;
 
 namespace CalculatorPro
 {
-    partial class classRoom
+    class Animal
     {
-        partial void classRoom1();
+        public string Name { get; set; }
 
-        partial void classRoom2();
+        public virtual void Roar()
+        {
+            Console.WriteLine("AYE");
+        }
     }
-    class fullNameChild
+
+    class cat : Animal
     {
-        private string name, surname, patronymic;
-
-        public string Name
+        public override void Roar()
         {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
+            Console.WriteLine("Мяу");
+        }
+    }
+
+    class dog : Animal
+    {
+        public override void Roar()
+        {
+            Console.WriteLine("Гав");
         }
 
-        public string Surname
+    }
+
+    class duck : Animal
+    {
+        public override void Roar()
         {
-            get
-            {
-                return surname;
-            }
-            set
-            {
-                surname = value;
-            }
+            Console.WriteLine("Кря");
+        }
+    }
+
+    class Car
+    {
+        protected virtual void startEngine()
+        {
+            Console.WriteLine("Мотор завелся");
         }
 
-        public string Patronymic
+        public virtual void carMove()
         {
-            get
-            {
-                return patronymic;
-            }
-            set
-            {
-                patronymic = value;
-            }
+            startEngine();
+            Console.WriteLine("Я еду");
+        }
+    }
+
+    class sportCar : Car
+    {
+        protected override void startEngine()
+        {
+            Console.WriteLine("AKRAPOVICH");
         }
 
-        public fullNameChild(string name, string surname, string patronymic)
+        public override void carMove()
         {
-            this.name = name;
-            this.surname = surname;
-            this.patronymic = patronymic;
+            startEngine();
+            Console.WriteLine("Я гоню");
+        }
+    }
+
+    class truck : Car
+    {
+        protected override void startEngine()
+        {
+            Console.WriteLine("IM BIG TRUCK");
         }
 
+        public override void carMove()
+        {
+            startEngine();
+            Console.WriteLine("Я медленно плетусь , за то я огромный");
+        }
     }
 }

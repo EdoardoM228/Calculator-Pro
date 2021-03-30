@@ -3,62 +3,40 @@ using System.Threading;
 
 namespace CalculatorPro
 {
-    partial class classRoom
-    {
-        partial void classRoom1()
-        {
-            Console.WriteLine("Hello Im Classroom 10-A");
-        }
-
-        partial void classRoom2()
-        {
-            Console.WriteLine("Hello Im Class 10-B");
-        }
-
-        public void startClassRoomMethod()
-        {
-            classRoom1();
-            classRoom2();
-        }
-    }
-    class MyClass
-    {
-        private string field = null;
-
-        public string Field
-        {
-            set
-            {
-                field = value;
-            }
-            get
-            {
-                return field;
-            }
-
-        }
-    }
     class Program
     {
         static void Main()
         {
-            MyClass obj = new MyClass();
+            Animal[] animal = new Animal[3];
 
-            obj.Field = "Hello world";
+            cat cat = new cat();
+            cat.Name = "KOSARA";
 
-            Console.WriteLine(obj.Field);
+            dog dog = new dog();
+            dog.Name = "COBAKEN";
 
-            string nameProgram = Console.ReadLine();
-            string surnameProgram = Console.ReadLine();
-            string patronymicProgram = Console.ReadLine();
+            duck duck = new duck();
+            duck.Name = "DONALID DUCK";
 
-            fullNameChild name = new fullNameChild(nameProgram, surnameProgram, patronymicProgram);
-            Console.WriteLine($"Ваше имя : {name.Name}, ваша фамилия : {name.Surname}, ваше очество : {name.Patronymic}");
+            animal[0] = cat;
+            animal[1] = dog;
+            animal[2] = duck;
 
-            classRoom classRoom = new classRoom();
+            for (int i = 0; i < animal.Length; i++)
+            {
+                Console.WriteLine($"Животное - {animal[i].Name}");
+                animal[i].Roar();
+            }
 
-            classRoom.startClassRoomMethod();
+            Car lamba = new sportCar();
+            lamba.carMove();
 
+            Car men = new truck();
+            men.carMove();
+
+            Car acura = new Car();
+            acura.carMove();
+            
             Console.ReadKey();
         }
     }
