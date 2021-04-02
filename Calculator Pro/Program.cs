@@ -7,37 +7,40 @@ namespace CalculatorPro
     {
         static void Main()
         {
-            Animal[] animal = new Animal[3];
-
-            cat cat = new cat();
-            cat.Name = "KOSARA";
-
-            dog dog = new dog();
-            dog.Name = "COBAKEN";
-
-            duck duck = new duck();
-            duck.Name = "DONALID DUCK";
-
-            animal[0] = cat;
-            animal[1] = dog;
-            animal[2] = duck;
-
-            for (int i = 0; i < animal.Length; i++)
+            while (true)
             {
-                Console.WriteLine($"Животное - {animal[i].Name}");
-                animal[i].Roar();
+                Console.Write("На каком топливе запустить ракету(diesel or benzin) : ");
+                string chooseFuel = Console.ReadLine();
+                switch (chooseFuel)
+                {
+                    case "diesel":
+                        rocket rocket = new rocket();
+                        rocket.rocketHad = new rocketHad();
+                        rocket.engine = new dieselEngine();
+                        rocket.engine.engineStart();
+                        Console.WriteLine($"Тяга двигателя : {tiaga(rocket.weight, rocket.engine.power)}");
+                        rocket.engine.engineStop();
+                        break;
+
+                    case "benzin":
+                        benzinEngine benzin = new benzinEngine();
+                        benzin.engineStart();
+                        int weight = benzin.chooseWeight(), power = benzin.choosePower();
+                        Console.WriteLine($"Вес : {weight}, Сила : {power}");
+                        Console.WriteLine($"Тяга двигателя : {tiaga(weight, power)}");
+                        benzin.engineStop();
+                        break;
+                    default:
+                        Console.WriteLine("такого топлива нет...");
+                        break;
+                }
+                Console.WriteLine("Нажми любую клавишу , чтобы повторить");
+                Console.ReadKey();
             }
-
-            Car lamba = new sportCar();
-            lamba.carMove();
-
-            Car men = new truck();
-            men.carMove();
-
-            Car acura = new Car();
-            acura.carMove();
-            
-            Console.ReadKey();
+        }
+        public static int tiaga(int mass , int power)
+        {
+            return (mass / power * 10) + 82;
         }
     }
 }

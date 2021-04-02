@@ -4,80 +4,94 @@ using System.Text;
 
 namespace CalculatorPro
 {
-    class Animal
+    interface engine
     {
-        public string Name { get; set; }
+        void engineStart();
+        void engineStop();
+        int weight { get; }
+        int power { get; }
+    }
 
-        public virtual void Roar()
+    class rocket
+    {
+        public  engine engine { get; set; }
+        public  rocketHad rocketHad{ get; set; }
+
+        public int weight
         {
-            Console.WriteLine("AYE");
+            get
+            {
+                return rocketHad.massRocketHad() + engine.weight;
+            }
         }
     }
 
-    class cat : Animal
+    class rocketHad
     {
-        public override void Roar()
+        public int cosmonavt { get; set; }
+        public int massShell { get; set; }
+
+        public rocketHad()
         {
-            Console.WriteLine("Мяу");
+            cosmonavt = 3;
+            massShell = 2000000;
+        }
+
+        public int massRocketHad()
+        {
+            return (cosmonavt * 80) + massShell;
         }
     }
 
-    class dog : Animal
+    class dieselEngine : engine
     {
-        public override void Roar()
+        public int power { get; }
+        public int weight { get; }
+
+        public dieselEngine()
         {
-            Console.WriteLine("Гав");
+            weight = 150000;
+            power = 600;
         }
 
-    }
-
-    class duck : Animal
-    {
-        public override void Roar()
+        public void engineStart()
         {
-            Console.WriteLine("Кря");
-        }
-    }
-
-    class Car
-    {
-        protected virtual void startEngine()
-        {
-            Console.WriteLine("Мотор завелся");
+            Console.WriteLine("Двигатель запущен..");
         }
 
-        public virtual void carMove()
+        public void engineStop()
         {
-            startEngine();
-            Console.WriteLine("Я еду");
+            Console.WriteLine("Двигатель заглушен..");
         }
     }
 
-    class sportCar : Car
+    class benzinEngine : engine
     {
-        protected override void startEngine()
-        {
-            Console.WriteLine("AKRAPOVICH");
+        public int weight { get; }
+        public int power { get; }
+
+       public int chooseWeight()
+        { 
+            int weight = 0;
+            Console.Write("Введи вес двигателя : ");
+            return weight = Convert.ToInt32(Console.ReadLine());
         }
 
-        public override void carMove()
+        public int choosePower()
         {
-            startEngine();
-            Console.WriteLine("Я гоню");
-        }
-    }
-
-    class truck : Car
-    {
-        protected override void startEngine()
-        {
-            Console.WriteLine("IM BIG TRUCK");
+            int power = 0;
+            Console.Write("Введи силу двигателя : ");
+            return power = Convert.ToInt32(Console.ReadLine());
         }
 
-        public override void carMove()
+        public void engineStart()
         {
-            startEngine();
-            Console.WriteLine("Я медленно плетусь , за то я огромный");
+            Console.WriteLine("Двигатель запущен..");
+        }
+
+        public void engineStop()
+        {
+            Console.WriteLine("Двигатель заглушен..");
         }
     }
 }
