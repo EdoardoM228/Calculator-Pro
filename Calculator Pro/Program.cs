@@ -4,28 +4,69 @@ using System.Threading;
 
 namespace CalculatorPro
 {
-
     public class MyClass
     {
         public IList<string> List { get; set; }
         public IEnumerable<string> BasicList { get; set; }
     }
 
-    enum colors 
+    public delegate void bankMessage(string message);
+    public class Bank
     {
-        White,
-        Green,
-        Blue,
-        Yellow,
-        Red,
-        Magenta, 
-        Gray
+        int sum;
+        bankMessage bankMessage;
+        
+        public void bankMessageMethod(bankMessage bankMessage1)
+        {
+            bankMessage = bankMessage1;
+        }
+        public Bank(int bankSum)
+        {
+            sum = bankSum;
+        }
+
+        public void put(int putSum)
+        {
+            sum += putSum;
+            bankMessage($"На счет положено {sum}");
+        }
+
+        public void withdraw(int withdrawSum)
+        {
+            if(sum >= withdrawSum)
+            {
+                sum -= withdrawSum;
+                bankMessage($"С счета снали {sum}");
+            }
+            else
+            {
+                bankMessage($"На счете не хватет средств");
+            }
+            
+        }
     }
-
-
-
+    
     class Program
     {
+        delegate int DelegateSum(int x, int y);
+        delegate int DelegateMult(int x, int y);
+        delegate void DelegateMessage();
+        static public void messageMethod()
+        {
+            Console.WriteLine("Message");
+        }
+
+        static public int methodSum(int x, int y)
+        {
+            return x + y;
+
+        }
+
+        static public int methodMult(int x, int y)
+        {
+            return x * y;
+        }
+
         static void Main()
         {
             var aobj = new MyClass();
@@ -36,60 +77,30 @@ namespace CalculatorPro
             aobj.List.Add("sdfsdf2");
             aobj.List.Add("sdfsdfsdf");
 
-            int i = 10;
-            //Boxing
-            object obj = i;
-            //Unboxing
-            int j = (int)obj;
+            DelegateMessage delegateMessage;
+            delegateMessage = messageMethod;
+            delegateMessage.Invoke();
 
-            string enumColor = Console.ReadLine();
-            bool ignoreCase;
-            colors colors = (colors)Enum.Parse(typeof(colors), enumColor, ignoreCase = true);
-            Console.WriteLine(colors);
+            DelegateSum delegateSum;
+            delegateSum = methodSum;
+            int result = delegateSum.Invoke(4, 5);
+            Console.WriteLine($"Результат {result}");
 
-            switch (colors)
+            DelegateMult delegateMult;
+            delegateMult = methodMult;
+            result = delegateSum.Invoke(4, 5);
+            Console.WriteLine($"Результат {result}");
+
+            Bank bank = new Bank(1000);
+            bank.bankMessageMethod(displayMessage);
+            bank.put(300);
+            bank.withdraw(1000);
+            bank.withdraw(400);
+
+            static void displayMessage(string message)
             {
-                case CalculatorPro.colors.White:
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine(colors);
-                    break;
-                case CalculatorPro.colors.Green:
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine(colors);
-                    break;
-                case CalculatorPro.colors.Blue:
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine(colors);
-                    break;
-                case CalculatorPro.colors.Yellow:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(colors);
-                    break;
-                case CalculatorPro.colors.Red:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(colors);
-                    break;
-                case CalculatorPro.colors.Magenta:
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine(colors);
-                    break;
-                case CalculatorPro.colors.Gray:
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine(colors);
-                    break;
-                default:
-                    break;
+                Console.WriteLine(message);
             }
-
-            while (true)
-            {
-                ConsoleKey consoleKey = Console.ReadKey().Key;
-
-                int consoleKeyCode = (int)consoleKey;
-
-                Console.WriteLine($"Клавиша которую нажал : {consoleKey},\n Код этой клавиши : {consoleKeyCode}");
-            }
-
 
         }
     }
