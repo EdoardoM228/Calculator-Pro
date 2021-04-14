@@ -12,6 +12,16 @@ namespace CalculatorPro
         int power { get; }
     }
 
+    interface engineVechile
+    {
+        void engineStartNormalCar();
+
+        void engineStartSportCar();
+        void engineStop();
+        int weight { get; set; }
+        int power { get; set; }
+    }
+
     class rocket
     {
         public  engine engine { get; set; }

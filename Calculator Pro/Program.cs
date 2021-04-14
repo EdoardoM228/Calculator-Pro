@@ -10,98 +10,85 @@ namespace CalculatorPro
         public IEnumerable<string> BasicList { get; set; }
     }
 
-    public delegate void bankMessage(string message);
-    public class Bank
+    class mercedes<series, typeFuel, engine> : mercedesEngine
     {
-        int sum;
-        bankMessage bankMessage;
-        
-        public void bankMessageMethod(bankMessage bankMessage1)
-        {
-            bankMessage = bankMessage1;
-        }
-        public Bank(int bankSum)
-        {
-            sum = bankSum;
-        }
+        private series classModel;
+        private typeFuel typeFuelModel;
+        private engine engineModel;
+        public series classGet { get; set; }
+        public typeFuel typeFuelGet { get; set; }
+        public engine engineGet { get; set; }
 
-        public void put(int putSum)
+        public void readyMercedesCarModel()
         {
-            sum += putSum;
-            bankMessage($"На счет положено {sum}");
-        }
-
-        public void withdraw(int withdrawSum)
-        {
-            if(sum >= withdrawSum)
-            {
-                sum -= withdrawSum;
-                bankMessage($"С счета снали {sum}");
-            }
-            else
-            {
-                bankMessage($"На счете не хватет средств");
-            }
-            
+            Console.WriteLine($"Индекс серии : {classGet}, тип топлива : {typeFuelGet}, размер двигателя : {engineGet}");
         }
     }
     
-    class Program
+    class mercedesEngine : engineVechile
     {
-        delegate int DelegateSum(int x, int y);
-        delegate int DelegateMult(int x, int y);
-        delegate void DelegateMessage();
-        static public void messageMethod()
+
+        public int weight { get; set; }
+        public int power{ get; set; }
+        public void engineStartNormalCar()
         {
-            Console.WriteLine("Message");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Im normal car");
+            Console.ResetColor(); 
         }
 
-        static public int methodSum(int x, int y)
+        public void engineStartSportCar()
         {
-            return x + y;
-
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Im sport car");
+            Console.ResetColor();
         }
 
-        static public int methodMult(int x, int y)
+        public void engineStop()
         {
-            return x * y;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("ПШШШШШШШШШШШШШШШШ");
+            Console.ResetColor();
         }
 
+        
+    }
+
+    class Program
+    { 
         static void Main()
         {
-            var aobj = new MyClass();
+            mercedes<string, string, double> mercedes = new mercedes<string, string, double>();        
+            mercedes.classGet = "G-class";
+            mercedes.typeFuelGet = "diesel";
+            mercedes.engineGet = 2.9;
 
-            aobj.List = new List<string>();
+            mercedes<string, string, double> mercedes1 = new mercedes<string, string, double>();
+            mercedes1.classGet = "S-class";
+            mercedes1.typeFuelGet = "diesel";
+            mercedes1.engineGet = 3.2;
 
-            aobj.List.Add("1asfsdfg");
-            aobj.List.Add("sdfsdf2");
-            aobj.List.Add("sdfsdfsdf");
-
-            DelegateMessage delegateMessage;
-            delegateMessage = messageMethod;
-            delegateMessage.Invoke();
-
-            DelegateSum delegateSum;
-            delegateSum = methodSum;
-            int result = delegateSum.Invoke(4, 5);
-            Console.WriteLine($"Результат {result}");
-
-            DelegateMult delegateMult;
-            delegateMult = methodMult;
-            result = delegateSum.Invoke(4, 5);
-            Console.WriteLine($"Результат {result}");
-
-            Bank bank = new Bank(1000);
-            bank.bankMessageMethod(displayMessage);
-            bank.put(300);
-            bank.withdraw(1000);
-            bank.withdraw(400);
-
-            static void displayMessage(string message)
+            if (mercedes.engineGet >= 3.0)
             {
-                Console.WriteLine(message);
+                mercedes.readyMercedesCarModel();
+                mercedes.engineStartSportCar();
+            }
+            else
+            {
+                mercedes.readyMercedesCarModel();
+                mercedes.engineStartNormalCar();
             }
 
+            if (mercedes1.engineGet >= 3.0)
+            {
+                mercedes1.readyMercedesCarModel();
+                mercedes1.engineStartSportCar();
+            }
+            else
+            {
+                mercedes1.readyMercedesCarModel();
+                mercedes1.engineStartNormalCar();
+            }
         }
     }
 }
