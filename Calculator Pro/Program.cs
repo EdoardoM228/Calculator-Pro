@@ -50,14 +50,28 @@ namespace CalculatorPro
             Console.WriteLine("ПШШШШШШШШШШШШШШШШ");
             Console.ResetColor();
         }
+    }
 
-        
+    struct nullAble
+    {
+        public string proprety { get; set; }
     }
 
     class Program
     { 
         static void Main()
         {
+            nullAble? nullAble = null;
+            if (nullAble.HasValue)
+            {
+                nullAble nullAble1 = nullAble.Value; 
+                Console.WriteLine(nullAble1.proprety);
+            }
+            else
+            {
+                Console.WriteLine("nullAble = null");
+            }
+
             mercedes<string, string, double> mercedes = new mercedes<string, string, double>();        
             mercedes.classGet = "G-class";
             mercedes.typeFuelGet = "diesel";
