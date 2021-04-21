@@ -10,99 +10,68 @@ namespace CalculatorPro
         public IEnumerable<string> BasicList { get; set; }
     }
 
-    class mercedes<series, typeFuel, engine> : mercedesEngine
-    {
-        private series classModel;
-        private typeFuel typeFuelModel;
-        private engine engineModel;
-        public series classGet { get; set; }
-        public typeFuel typeFuelGet { get; set; }
-        public engine engineGet { get; set; }
+    delegate void checkButton();
 
-        public void readyMercedesCarModel()
+    class eventsButton
+    {
+        public event checkButton checkButtonS = null;
+        public event checkButton checkButtonW = null;
+
+        public void eventS()
         {
-            Console.WriteLine($"Индекс серии : {classGet}, тип топлива : {typeFuelGet}, размер двигателя : {engineGet}");
+            if(checkButtonS != null)
+            {
+                checkButtonS.Invoke();
+            }
+        }
+
+        public void eventW()
+        {
+            if(checkButtonW != null)
+            {
+                checkButtonW.Invoke();
+            }
         }
     }
-    
-    class mercedesEngine : engineVechile
-    {
-
-        public int weight { get; set; }
-        public int power{ get; set; }
-        public void engineStartNormalCar()
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Im normal car");
-            Console.ResetColor(); 
-        }
-
-        public void engineStartSportCar()
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Im sport car");
-            Console.ResetColor();
-        }
-
-        public void engineStop()
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("ПШШШШШШШШШШШШШШШШ");
-            Console.ResetColor();
-        }
-    }
-
-    struct nullAble
-    {
-        public string proprety { get; set; }
-    }
-
     class Program
-    { 
+    {
+        static void buttonSClick()
+        {
+            Console.WriteLine("Вперед");
+        }
+
+        static void buttonWClick()
+        {
+            Console.WriteLine("Вперед");
+        }
+
+
         static void Main()
         {
-            nullAble? nullAble = null;
-            if (nullAble.HasValue)
+            eventsButton sOrw = new eventsButton();
+
+            sOrw.checkButtonS += buttonSClick;
+            sOrw.checkButtonW += buttonWClick;
+
+            ConsoleKey consoleKey;
+
+            while (true)
             {
-                nullAble nullAble1 = nullAble.Value; 
-                Console.WriteLine(nullAble1.proprety);
-            }
-            else
-            {
-                Console.WriteLine("nullAble = null");
+                consoleKey = Console.ReadKey().Key;
+
+                switch (consoleKey)
+                {
+                    case ConsoleKey.W :
+                        sOrw.eventW();
+                        break;
+                    case ConsoleKey.S:
+                        sOrw.eventS();
+                        break;  
+
+                }
             }
 
-            mercedes<string, string, double> mercedes = new mercedes<string, string, double>();        
-            mercedes.classGet = "G-class";
-            mercedes.typeFuelGet = "diesel";
-            mercedes.engineGet = 2.9;
-
-            mercedes<string, string, double> mercedes1 = new mercedes<string, string, double>();
-            mercedes1.classGet = "S-class";
-            mercedes1.typeFuelGet = "diesel";
-            mercedes1.engineGet = 3.2;
-
-            if (mercedes.engineGet >= 3.0)
-            {
-                mercedes.readyMercedesCarModel();
-                mercedes.engineStartSportCar();
-            }
-            else
-            {
-                mercedes.readyMercedesCarModel();
-                mercedes.engineStartNormalCar();
-            }
-
-            if (mercedes1.engineGet >= 3.0)
-            {
-                mercedes1.readyMercedesCarModel();
-                mercedes1.engineStartSportCar();
-            }
-            else
-            {
-                mercedes1.readyMercedesCarModel();
-                mercedes1.engineStartNormalCar();
-            }
+    
         }
     }
 }
