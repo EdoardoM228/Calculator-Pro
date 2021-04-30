@@ -10,8 +10,26 @@ namespace CalculatorPro
         public IEnumerable<string> BasicList { get; set; }
     }
 
-    delegate void checkButton();
 
+    delegate void midPoint(int number);
+
+    class eventMidPoint
+    {
+        public event midPoint point = null;
+
+        public void Count(int start, int end)
+        {
+            for (int i = start; i <= end; i++)
+            {
+                if (i == start + (end - start) / 2)
+                {
+                    point(i);
+                }
+            }
+        }
+    }
+
+    delegate void checkButton();
     class eventsButton
     {
         public event checkButton checkButtonS = null;
@@ -19,7 +37,7 @@ namespace CalculatorPro
 
         public void eventS()
         {
-            if(checkButtonS != null)
+            if (checkButtonS != null)
             {
                 checkButtonS.Invoke();
             }
@@ -27,7 +45,7 @@ namespace CalculatorPro
 
         public void eventW()
         {
-            if(checkButtonW != null)
+            if (checkButtonW != null)
             {
                 checkButtonW.Invoke();
             }
@@ -35,43 +53,58 @@ namespace CalculatorPro
     }
     class Program
     {
-        static void buttonSClick()
+        static object locker = new object();
+
+        static void obj()
         {
-            Console.WriteLine("Вперед");
+            for(int i = 0; i < 20; i++)
+            {
+                lock (locker)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(new string(' ', 10) + "Locker");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Thread.Sleep(100);
+                }
+            }    
         }
 
-        static void buttonWClick()
-        {
-            Console.WriteLine("Вперед");
-        }
-
+        //static void printSecond()
+        //{
+        //    while (true)
+        //    {
+        //        Console.WriteLine(new string(' ', 10) + "Secondary");
+        //    }
+        //}
 
         static void Main()
         {
-            eventsButton sOrw = new eventsButton();
+            ////  ThreadStart writeSecond = new ThreadStart(printSecond);
+            //  //Thread thread = new Thread(printSecond);
+            //  //thread.Start();
 
-            sOrw.checkButtonS += buttonSClick;
-            sOrw.checkButtonW += buttonWClick;
+            //  while (true)
+            //  {
+            //      Console.WriteLine("Primary");
+            //  }
+            Console.SetWindowSize(80, 45);
 
-            ConsoleKey consoleKey;
+            ThreadStart locker1 = new ThreadStart(obj);
+            Thread thread = new Thread(obj);
+            thread.Start();
 
-            while (true)
+            for(int i = 0; i < 20; i++)
             {
-                consoleKey = Console.ReadKey().Key;
-
-                switch (consoleKey)
+                lock (locker)
                 {
-                    case ConsoleKey.W :
-                        sOrw.eventW();
-                        break;
-                    case ConsoleKey.S:
-                        sOrw.eventS();
-                        break;  
-
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("UnLocker");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Thread.Sleep(100);
                 }
             }
-
-    
         }
+
     }
 }
+
