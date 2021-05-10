@@ -10,101 +10,48 @@ namespace CalculatorPro
         public IEnumerable<string> BasicList { get; set; }
     }
 
-
-    delegate void midPoint(int number);
-
-    class eventMidPoint
-    {
-        public event midPoint point = null;
-
-        public void Count(int start, int end)
-        {
-            for (int i = start; i <= end; i++)
-            {
-                if (i == start + (end - start) / 2)
-                {
-                    point(i);
-                }
-            }
-        }
-    }
-
-    delegate void checkButton();
-    class eventsButton
-    {
-        public event checkButton checkButtonS = null;
-        public event checkButton checkButtonW = null;
-
-        public void eventS()
-        {
-            if (checkButtonS != null)
-            {
-                checkButtonS.Invoke();
-            }
-        }
-
-        public void eventW()
-        {
-            if (checkButtonW != null)
-            {
-                checkButtonW.Invoke();
-            }
-        }
-    }
     class Program
     {
-        static object locker = new object();
-
-        static void obj()
+        static void Main(string[] args)
         {
-            for(int i = 0; i < 20; i++)
+            try
             {
-                lock (locker)
+                Console.WriteLine("Введи знак / or *");
+                string p = Console.ReadLine();
+                if(p == "/")
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(new string(' ', 10) + "Locker");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Thread.Sleep(100);
+                    int i = Convert.ToInt32(Console.ReadLine());
+                    int j = Convert.ToInt32(Console.ReadLine());
+                    int c = i / j;
+                    Console.WriteLine(c);
                 }
-            }    
-        }
-
-        //static void printSecond()
-        //{
-        //    while (true)
-        //    {
-        //        Console.WriteLine(new string(' ', 10) + "Secondary");
-        //    }
-        //}
-
-        static void Main()
-        {
-            ////  ThreadStart writeSecond = new ThreadStart(printSecond);
-            //  //Thread thread = new Thread(printSecond);
-            //  //thread.Start();
-
-            //  while (true)
-            //  {
-            //      Console.WriteLine("Primary");
-            //  }
-            Console.SetWindowSize(80, 45);
-
-            ThreadStart locker1 = new ThreadStart(obj);
-            Thread thread = new Thread(obj);
-            thread.Start();
-
-            for(int i = 0; i < 20; i++)
-            {
-                lock (locker)
+                else
                 {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("UnLocker");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Thread.Sleep(100);
+                    int i = Convert.ToInt32(Console.ReadLine());
+                    int j = Convert.ToInt32(Console.ReadLine());
+                    int c = checked(i * j);
+                    Console.WriteLine(c);
                 }
             }
+            catch(OverflowException ex)
+            {
+                Console.WriteLine("Слишком большое число");
+            }
+            catch(DivideByZeroException ex)
+            {
+                Console.WriteLine("Деление на ноль");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("какая-то");
+            }
+            finally
+            {
+                Console.WriteLine("Работа завершена");
+                Console.ReadKey();
+            }
         }
-
+        
     }
 }
 
