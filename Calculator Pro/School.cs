@@ -1,52 +1,76 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-// ICollection - определяет размер, перечислители и методы синхронизации для всех нестандартных коллекций.
+// ICollection<T> - определяет методы, используемые для управления универсальными коллекциями.
 
 namespace Collection
 {
-    class UserCollection : ICollection
+    class UserCollection<T> : ICollection<T>
     {
-        readonly object syncRoot = new object();
+        T[] elements = new T[0];
 
-        readonly object[] elements = { 1, 2, 3, 4 };
-
-        // Копирует элементы ICollection в Array, начиная с конкретного индекса Array.
-        public void CopyTo(Array array, int userArrayIndex)
+        // Добавляет элемент в интерфейс ICollection<T>.
+        public void Add(T item)
         {
-            var arr = array as object[];
-
-            if (arr == null)
-                throw new ArgumentException("Expecting array to be object[]");
-
-            for (int i = 0; i < array.Length; i++)
-            {
-                arr[userArrayIndex++] = elements[i];
-            }
+            var newArray = new T[elements.Length + 1]; // Создание нового массива (на 1 больше старого).
+            elements.CopyTo(newArray, 0);              // Копирование старого массива в новый.
+            newArray[newArray.Length - 1] = item;      // Помещение нового значения в конец массива.
+            elements = newArray;                       // Замена старого массива на новый.
         }
 
-        // Возвращает число элементов, содержащихся в коллекции ICollection.
+        // Удаляет все элементы из коллекции ICollection<T>.
+        public void Clear()
+        {
+            elements = new T[0];
+        }
+
+        // Определяет, содержит ли интерфейс ICollection<T> указанное значение.
+        public bool Contains(T item)
+        {
+            foreach (var element in elements)
+            {
+                if (element.Equals(item))
+                    return true;
+            }
+            return false;
+        }
+
+        // Копирует элементы ICollection<T> в Array, начиная с конкретного индекса Array.
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            elements.CopyTo(array, arrayIndex);
+        }
+
+        // Получает число элементов, содержащихся в интерфейсе ICollection<T>.
         public int Count
         {
             get { return elements.Length; }
         }
 
-        // Получает значение, позволяющее определить, является ли доступ к коллекции ICollection синхронизированным (потокобезопасным).
-        public bool IsSynchronized
+        // Получает значение, указывающее, доступна ли ICollection<T> только для чтения.
+        public bool IsReadOnly
         {
-            get { return true; }
+            get { return false; }
         }
 
-        // Получает объект, который можно использовать для синхронизации доступа к ICollection.
-        public object SyncRoot
+        // Удаляет первое вхождение указанного объекта из коллекции ICollection<T>.
+        public bool Remove(T item)
         {
-            get { return syncRoot; }
+            return true;
         }
 
-        // Возвращает перечислитель, который выполняет итерацию по элементам коллекции. (Унаследовано от IEnumerable.)
-        public IEnumerator GetEnumerator()
+        // Возвращает перечислитель, выполняющий перебор элементов в коллекции.  (Унаследовано от IEnumerable<T>.)
+        public IEnumerator<T> GetEnumerator()
         {
-            return elements.GetEnumerator();
+            return ((IEnumerable<T>)elements).GetEnumerator();
+        }
+
+        // Возвращает перечислитель, который выполняет итерацию по элементам коллекции. (Унаследовано от IEnumerable)
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (this as IEnumerable<T>).GetEnumerator();
         }
     }
 }

@@ -6,23 +6,14 @@ namespace Collection
     {
         static void Main()
         {
-            var collection = new UserCollection();
+            var collection = new UserCollection<int> { 1, 2, 3 };
 
-            foreach (var element in collection)
+            foreach (var item in collection)
             {
-                Console.WriteLine(element);
+                Console.WriteLine(item);
             }
 
-            Console.WriteLine(new string('-', 2));
-
-            var array = new object[collection.Count];
-
-            collection.CopyTo(array, 0);
-
-            foreach (int element in array)
-            {
-                Console.WriteLine(element);
-            }
+            Console.WriteLine(collection.Contains(2));
 
             // Delay.
             Console.ReadKey();
