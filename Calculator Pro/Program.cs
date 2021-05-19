@@ -1,57 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 
-namespace CalculatorPro
+namespace Collection
 {
-    public class MyClass
-    {
-        public IList<string> List { get; set; }
-        public IEnumerable<string> BasicList { get; set; }
-    }
-
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            try
+            var collection = new UserCollection();
+
+            foreach (var element in collection)
             {
-                Console.WriteLine("Введи знак / or *");
-                string p = Console.ReadLine();
-                if(p == "/")
-                {
-                    int i = Convert.ToInt32(Console.ReadLine());
-                    int j = Convert.ToInt32(Console.ReadLine());
-                    int c = i / j;
-                    Console.WriteLine(c);
-                }
-                else
-                {
-                    int i = Convert.ToInt32(Console.ReadLine());
-                    int j = Convert.ToInt32(Console.ReadLine());
-                    int c = checked(i * j);
-                    Console.WriteLine(c);
-                }
+                Console.WriteLine(element);
             }
-            catch(OverflowException ex)
+
+            Console.WriteLine(new string('-', 2));
+
+            var array = new object[collection.Count];
+
+            collection.CopyTo(array, 0);
+
+            foreach (int element in array)
             {
-                Console.WriteLine("Слишком большое число");
+                Console.WriteLine(element);
             }
-            catch(DivideByZeroException ex)
-            {
-                Console.WriteLine("Деление на ноль");
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("какая-то");
-            }
-            finally
-            {
-                Console.WriteLine("Работа завершена");
-                Console.ReadKey();
-            }
+
+            // Delay.
+            Console.ReadKey();
         }
-        
     }
 }
-

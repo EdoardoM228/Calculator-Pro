@@ -1,107 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections;
 
-namespace CalculatorPro
+// ICollection - определяет размер, перечислители и методы синхронизации для всех нестандартных коллекций.
+
+namespace Collection
 {
-    interface engine
+    class UserCollection : ICollection
     {
-        void engineStart();
-        void engineStop();
-        int weight { get; }
-        int power { get; }
-    }
+        readonly object syncRoot = new object();
 
-    interface engineVechile
-    {
-        void engineStartNormalCar();
+        readonly object[] elements = { 1, 2, 3, 4 };
 
-        void engineStartSportCar();
-        void engineStop();
-        int weight { get; set; }
-        int power { get; set; }
-    }
-
-    class rocket
-    {
-        public  engine engine { get; set; }
-        public  rocketHad rocketHad{ get; set; }
-
-        public int weight
+        // Копирует элементы ICollection в Array, начиная с конкретного индекса Array.
+        public void CopyTo(Array array, int userArrayIndex)
         {
-            get
+            var arr = array as object[];
+
+            if (arr == null)
+                throw new ArgumentException("Expecting array to be object[]");
+
+            for (int i = 0; i < array.Length; i++)
             {
-                return rocketHad.massRocketHad() + engine.weight;
+                arr[userArrayIndex++] = elements[i];
             }
         }
-    }
 
-    class rocketHad
-    {
-        public int cosmonavt { get; set; }
-        public int massShell { get; set; }
-
-        public rocketHad()
+        // Возвращает число элементов, содержащихся в коллекции ICollection.
+        public int Count
         {
-            cosmonavt = 3;
-            massShell = 2000000;
+            get { return elements.Length; }
         }
 
-        public int massRocketHad()
+        // Получает значение, позволяющее определить, является ли доступ к коллекции ICollection синхронизированным (потокобезопасным).
+        public bool IsSynchronized
         {
-            return (cosmonavt * 80) + massShell;
-        }
-    }
-
-    class dieselEngine : engine
-    {
-        public int power { get; }
-        public int weight { get; }
-
-        public dieselEngine()
-        {
-            weight = 150000;
-            power = 600;
+            get { return true; }
         }
 
-        public void engineStart()
+        // Получает объект, который можно использовать для синхронизации доступа к ICollection.
+        public object SyncRoot
         {
-            Console.WriteLine("Двигатель запущен..");
+            get { return syncRoot; }
         }
 
-        public void engineStop()
+        // Возвращает перечислитель, который выполняет итерацию по элементам коллекции. (Унаследовано от IEnumerable.)
+        public IEnumerator GetEnumerator()
         {
-            Console.WriteLine("Двигатель заглушен..");
-        }
-    }
-
-    class benzinEngine : engine
-    {
-        public int weight { get; }
-        public int power { get; }
-
-       public int chooseWeight()
-        { 
-            int weight = 0;
-            Console.Write("Введи вес двигателя : ");
-            return weight = Convert.ToInt32(Console.ReadLine());
-        }
-
-        public int choosePower()
-        {
-            int power = 0;
-            Console.Write("Введи силу двигателя : ");
-            return power = Convert.ToInt32(Console.ReadLine());
-        }
-
-        public void engineStart()
-        {
-            Console.WriteLine("Двигатель запущен..");
-        }
-
-        public void engineStop()
-        {
-            Console.WriteLine("Двигатель заглушен..");
+            return elements.GetEnumerator();
         }
     }
 }
