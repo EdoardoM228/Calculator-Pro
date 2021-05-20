@@ -6,16 +6,14 @@ namespace Collection
     {
         static void Main()
         {
-            var collection = new UserCollection<int> { 1, 2, 3 };
+            Persone[] persone = { new Persone("Edward", "Mihai"), new Persone("Petea", "Mazilu") };
 
-            foreach (var item in collection)
+            var personeCollection = new People(persone);
+
+            foreach(var persone1 in personeCollection)
             {
-                Console.WriteLine(item);
+                Console.WriteLine($"fName : {persone1.fName}, sName : {persone1.sName}");
             }
-
-            Console.WriteLine(collection.Contains(2));
-
-            // Delay.
             Console.ReadKey();
         }
     }
