@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
 using System.IO.Compression;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Collection
 {
@@ -10,48 +12,93 @@ namespace Collection
     {
         static void Main()
         {
-            FileStream stream = File.Open(@"H:\Новая папка\Account.txt", FileMode.OpenOrCreate);
+            RegionInfo region = RegionInfo.CurrentRegion;
 
-            Console.Write("Введите логин : ");
-            string login = Console.ReadLine();
+            Console.WriteLine($"Region Name : {region.CurrencyEnglishName}");
+            Console.WriteLine($"Native Name : {region.CurrencyNativeName}");
+            Console.WriteLine($"Symbol : {region.CurrencySymbol}");
 
-            Console.Write("Введите пароль : ");
-            string password = Console.ReadLine();
+            string[] week = CultureInfo.CurrentCulture.DateTimeFormat.DayNames;
 
-            var writer = new StreamWriter(stream);
-            
-            writer.WriteLine($"Account login : {login}");
-            writer.WriteLine($"Account password : {password}");
-            writer.Close();
-
-            stream.Close();
-
-            FileStream fileStream = File.OpenRead(@"H:\Новая папка\Account.txt");
-            FileStream streamZip = File.Create(@"H:\Новая папка\test.zip");
-
-            GZipStream compressor = new GZipStream(streamZip, CompressionMode.Compress);
-
-            int theByte = fileStream.ReadByte();
-            while (theByte != -1)
+            foreach(string days in week)
             {
-                compressor.WriteByte((byte)theByte);
+                Console.WriteLine(days);
             }
 
-            compressor.Close();
+            Console.WriteLine(new string('-', 35));
 
-            FileStream zipDecompress = File.OpenRead(@"H:\Новая папка\test.zip");
-            FileStream creatFile = File.Create(@"H:\Новая папка\test_zip.txt");
+            week = CultureInfo.GetCultureInfo("en-US").DateTimeFormat.DayNames;
 
-            GZipStream deCompressor = new GZipStream(zipDecompress, CompressionMode.Decompress);
-
-            int theByteDeCompress = creatFile.ReadByte();
-            while (theByteDeCompress != -1)
+            Console.WriteLine("Дни недели на английском:");
+            foreach(string days in week)
             {
-                creatFile.WriteByte((byte)theByte);
-                theByteDeCompress = deCompressor.ReadByte();
+                Console.WriteLine(days);
             }
 
-            deCompressor.Close();
+            Console.WriteLine(new string('-', 35));
+
+            week = CultureInfo.GetCultureInfo("de-De").DateTimeFormat.DayNames;
+
+            Console.WriteLine("Дни недели на немецком:");
+            foreach (string days in week)
+            {
+                Console.WriteLine(days);
+            }
+
+            Console.WriteLine(new string('-', 35));
+
+            week = CultureInfo.GetCultureInfo("kk-KZ").DateTimeFormat.DayNames;
+
+            Console.WriteLine("Дни недели на казахском:");
+            foreach (string days in week)
+            {
+                Console.WriteLine(days);
+            }
+
+            double money = 144.48;
+
+            var america = new CultureInfo("en-US");
+            var germany = new CultureInfo("de-DE");
+            var kazahstan = new CultureInfo("kk-KZ");
+
+            string localMoney = money.ToString("C", america);
+            Console.WriteLine($"Деньги США : {localMoney}");
+
+            localMoney = money.ToString("C", germany);
+            Console.WriteLine($"Деньги Германии : {localMoney}");
+
+            localMoney = money.ToString("C", kazahstan);
+            Console.WriteLine($"Деньги Казахстана : {localMoney}");
+
+            //d Определяет символы цифр.
+            //D Определяет любой символ, который не является цифрой.
+            //w Определяет любой символ цифры, буквы или подчеркивания.
+            //W Определяет любой символ, который не является цифрой, буквой или подчеркиванием.
+            //s Определяет любой непечатный символ, включая пробел. 
+            //S Определяет любой символ, кроме символов табуляции, новой строки и возврата каретки.
+            //. Определяет любой символ кроме символа новой строки.
+            //\. Определяет символ точки.
+
+            string dog = @"\d";
+
+            var regex = new Regex(dog);
+
+            while (true)
+            {
+                string str = Console.ReadKey().KeyChar.ToString();
+
+                if (str == " ")
+                    break;
+
+                if (regex.IsMatch(str))
+                {
+                    Console.WriteLine(" Собака нашла");
+                }
+                else
+                {
+                    Console.WriteLine(" Собака не нашла");
+                }
+            }
 
 
             Console.ReadKey();
