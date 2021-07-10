@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Collection
 {
@@ -12,94 +13,57 @@ namespace Collection
     {
         static void Main()
         {
-            RegionInfo region = RegionInfo.CurrentRegion;
+            //FileStream stream = new FileStream(@"H:\Новая папка\Новый текстовый документ.xml", FileMode.Open);
 
-            Console.WriteLine($"Region Name : {region.CurrencyEnglishName}");
-            Console.WriteLine($"Native Name : {region.CurrencyNativeName}");
-            Console.WriteLine($"Symbol : {region.CurrencySymbol}");
+            var xmlFileWriter = new XmlTextWriter(@"H:\Новая папка\Новый текстовый документ.xml", null);
+            xmlFileWriter.Formatting = Formatting.Indented;
+            xmlFileWriter.Indentation = 1;
+            xmlFileWriter.IndentChar = ' ';
+            xmlFileWriter.QuoteChar = '\"';  
 
-            string[] week = CultureInfo.CurrentCulture.DateTimeFormat.DayNames;
+            xmlFileWriter.WriteStartDocument();
+            xmlFileWriter.WriteStartElement("ListOfBook");
+            xmlFileWriter.WriteStartElement("Book");
+            xmlFileWriter.WriteStartElement("Title");
+            xmlFileWriter.WriteString(" Dubrovskii");
+            xmlFileWriter.WriteComment("навзание книги");
+            xmlFileWriter.WriteEndElement();
+            xmlFileWriter.WriteStartElement("Author");
+            xmlFileWriter.WriteString(" A.S.Puskin");
+            xmlFileWriter.WriteComment("Автор книги");
+            xmlFileWriter.WriteEndElement();
+            xmlFileWriter.WriteStartElement("Year");
+            xmlFileWriter.WriteString(" 1841");
+            xmlFileWriter.WriteComment("Год первого выпуска");
+            xmlFileWriter.WriteEndElement();
+            xmlFileWriter.WriteStartElement("theMainCharacter");
+            xmlFileWriter.WriteString(@"Троекуров Кирила Петрович
+Дубровский - старший
+Владимир Дубровский
+Маша Троекурова
+Князь Верейский
+Антон Спицын");
+            xmlFileWriter.WriteEndElement();
+            xmlFileWriter.WriteEndElement();
+            xmlFileWriter.WriteEndElement();
 
-            foreach(string days in week)
+            xmlFileWriter.Close();
+
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(@"H:\Новая папка\Новый текстовый документ.xml");
+
+            XmlNode root = xmlDocument.DocumentElement;
+
+            Console.WriteLine($"Имя документа : {xmlDocument.LocalName}");
+
+            foreach(XmlNode book in root.ChildNodes)
             {
-                Console.WriteLine(days);
-            }
-
-            Console.WriteLine(new string('-', 35));
-
-            week = CultureInfo.GetCultureInfo("en-US").DateTimeFormat.DayNames;
-
-            Console.WriteLine("Дни недели на английском:");
-            foreach(string days in week)
-            {
-                Console.WriteLine(days);
-            }
-
-            Console.WriteLine(new string('-', 35));
-
-            week = CultureInfo.GetCultureInfo("de-De").DateTimeFormat.DayNames;
-
-            Console.WriteLine("Дни недели на немецком:");
-            foreach (string days in week)
-            {
-                Console.WriteLine(days);
-            }
-
-            Console.WriteLine(new string('-', 35));
-
-            week = CultureInfo.GetCultureInfo("kk-KZ").DateTimeFormat.DayNames;
-
-            Console.WriteLine("Дни недели на казахском:");
-            foreach (string days in week)
-            {
-                Console.WriteLine(days);
-            }
-
-            double money = 144.48;
-
-            var america = new CultureInfo("en-US");
-            var germany = new CultureInfo("de-DE");
-            var kazahstan = new CultureInfo("kk-KZ");
-
-            string localMoney = money.ToString("C", america);
-            Console.WriteLine($"Деньги США : {localMoney}");
-
-            localMoney = money.ToString("C", germany);
-            Console.WriteLine($"Деньги Германии : {localMoney}");
-
-            localMoney = money.ToString("C", kazahstan);
-            Console.WriteLine($"Деньги Казахстана : {localMoney}");
-
-            //d Определяет символы цифр.
-            //D Определяет любой символ, который не является цифрой.
-            //w Определяет любой символ цифры, буквы или подчеркивания.
-            //W Определяет любой символ, который не является цифрой, буквой или подчеркиванием.
-            //s Определяет любой непечатный символ, включая пробел. 
-            //S Определяет любой символ, кроме символов табуляции, новой строки и возврата каретки.
-            //. Определяет любой символ кроме символа новой строки.
-            //\. Определяет символ точки.
-
-            string dog = @"\d";
-
-            var regex = new Regex(dog);
-
-            while (true)
-            {
-                string str = Console.ReadKey().KeyChar.ToString();
-
-                if (str == " ")
-                    break;
-
-                if (regex.IsMatch(str))
+                Console.WriteLine("Найденная книга : ");
+                foreach(XmlNode species in book.ChildNodes)
                 {
-                    Console.WriteLine(" Собака нашла");
-                }
-                else
-                {
-                    Console.WriteLine(" Собака не нашла");
+                    Console.WriteLine(book.Name + ": " + book.InnerText);
                 }
             }
-
 
             Console.ReadKey();
         }
